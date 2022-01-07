@@ -1,8 +1,12 @@
-//keep score
+//keep and display score
 let playerScore = 0;
 let computerScore = 0;
+const playerScoreUI = document.querySelector('#playerScore');
+const computerScoreUI = document.querySelector('#computerScore');
 
-let playerPlay ='';
+let playerPlay ="";
+let roundStatus = "Select your choice.";
+let gameStatus = "Who will win?"
 
 //display winner and loser messages
 const roundMessage = document.querySelector("#message")
@@ -22,53 +26,47 @@ function computerPlay() {
     }
 }
 
-//display score
-const playerScoreUI = document.querySelector('#playerScore');
-const computerScoreUI = document.querySelector('#computerScore');
-playerScoreUI.innerHTML = playerScore;
-computerScoreUI.innerHTML = computerScore;
 
 //make buttons for user choice work
 const rpsButtons = document.querySelectorAll('.rpsSelection')
 rpsButtons.forEach((rpsButton) => {
     rpsButton.addEventListener("click", () => {
         playerPlay = rpsButton.innerHTML;
-        return playerPlay;
+        playerPlay = playerPlay.toLowerCase();
+        game();
     })
 })
 
-//compare user choice to computer choice
+//declare round winner and update score and round messages
 function playRound(playerChoice, computerChoice){
+    playerScoreUI.innerHTML = playerScore;
+    computerScoreUI.innerHTML = computerScore;
+    roundMessage.innerHTML = roundStatus;
     if (playerChoice == "rock" && computerChoice == "scissors" || playerChoice == "scissors" && computerChoice == "rock" || playerChoice == "paper" && computerChoice == "rock"){
         playerScore ++
-        return "You win!" 
+        roundStatus = "You win! " + `${playerChoice} beats ${computerChoice}`
     }
     else if (playerChoice == "rock" && computerChoice == "paper" || playerChoice == "paper" && computerChoice == "scissors" || playerChoice == "scissors" && computerChoice == "paper"){
         computerScore ++
-        return "You lose :("  
+        roundStatus = "You lose :( .  " + `${computerChoice} beats ${playerChoice}`;
     }
     else {
-        return "You tied." 
+        roundStatus = "You tied.";
     }
 }
-
 function game(){
-    console.log(playRound(playerPlay, computerPlay()));
-    if (playerScore > computerScore) {
-        console.log(`YOU WON`);
+    gameMessage.innerHTML = gameStatus;
+    if (playerScore == 5){
+        playerScoreUI.innerHTML = playerScore;
+        gameStatus = "YOU WIN!";
+        gameMessage.innerHTML = gameStatus;
     }
-    else if (computerScore > playerScore){
-        console.log(`You lost :(`);
+    else if (computerScore == 5){
+        computerScoreUI.innerHTML = computerScore;
+        gameStatus = "Try again.";
+        gameMessage.innerHTML = gameStatus;
     }
-    else {
-        console.log(`You tied. Play again.`);
+    else{
+    playRound(playerPlay, computerPlay());
     }
 }
-
-
-//get user choice
-// function playerPlay(){
-//     let playerPlay = prompt("rock paper or scissors?")
-//     playerPlay = playerPlay.toLowerCase();
-//     return playerPlay;
-// }
